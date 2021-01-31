@@ -18,5 +18,6 @@
   <mat-card-actions>
     <button (click)="onToggleLight()" mat-button>{{ toggleButtonText }}</button>
     <button (click)="onRandom()" [disabled]="!this.light?.state?.on" mat-button>Aléatoire</button>
+    <input type="color" [value]="rgbHex" (change)='onChangeColor($event)' name="color">
   </mat-card-actions>
 </mat-card>

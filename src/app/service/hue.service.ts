@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {from, Observable} from 'rxjs';
 import {Light} from '../shared/model/light.model';
+declare var ColorConverter: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class HueService {
   private static MAX_HUE = 65535;
-  private readonly HUE_API = 'http://localhost:9000';
+  private readonly HUE_API = 'http://192.168.1.43/api/HTaZnVuZ8ihBZcMliMB0kuvIwHWiUAJCupJNz4yx';
 
   constructor(private http: HttpClient) {}
 
@@ -16,12 +17,12 @@ export class HueService {
     return Math.floor(Math.random() * this.MAX_HUE) + 1;
   }
 
-  getLights(): Observable<Light[]> {
-    return this.http.get<Light[]>(`${this.HUE_API}/lights`);
+  getLights(): Observable<Object> {
+    return this.http.get<Object>(`${this.HUE_API}/lights`);
   }
 
   toggleLight(id: number | undefined, on: boolean): Observable<any> {
-    return this.http.put<any>(`${this.HUE_API}/lights/${id}/toggle`, { on });
+    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`, { on });
   }
 
   getLightInfo(id: number | undefined): Observable<Light> {
@@ -29,12 +30,17 @@ export class HueService {
   }
 
   changeBrightness(id: number | undefined, bri: number): Observable<any> {
-    return this.http.put<any>(`${this.HUE_API}/lights/${id}/brightness`, { brightness: bri });
+    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`, { bri: bri });
   }
 
-  setRandomHue(id: number | undefined): Observable<any> {
-    return this.http.put<any>(`${this.HUE_API}/lights/${id}/hue`, { hue: HueService.getRandomHue() });
+  setRandomHue(id: number | undefined, modelid: String | undefined): Observable<any> {
+    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`,{ xy: ColorConverter.rgbToXy(0, 255, 200, modelid)} );
   }
+  setColor(r: number, g: number, b: number, id: number | undefined,  modelid: String | undefined): Observable<any> {
+    console.log(45)
+    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`,{ xy: ColorConverter.rgbToXy(r, g, b, modelid)} );
+  }
+  
 
   /**
    * Returns RGB Value of Hue XY array
@@ -64,4 +70,5 @@ export class HueService {
 
     return {r, g, b};
   }
+
 }
