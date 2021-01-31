@@ -34,7 +34,7 @@ export class HueService {
   }
 
   setRandomHue(id: number | undefined, modelid: String | undefined): Observable<any> {
-    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`,{ xy: ColorConverter.rgbToXy(0, 255, 200, modelid)} );
+    return this.http.put<any>(`${this.HUE_API}/lights/${id}/state`,{ hue: HueService.getRandomHue() } );
   }
   setColor(r: number, g: number, b: number, id: number | undefined,  modelid: String | undefined): Observable<any> {
     console.log(45)

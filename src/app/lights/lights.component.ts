@@ -14,7 +14,7 @@ export class LightsComponent implements OnInit, OnDestroy {
   lights: Light[] = [];
   makeRequest = true;
   lightsSubscription: Subscription | undefined;
-  private readonly REQUEST_INTERVAL = 10000000;
+  private readonly REQUEST_INTERVAL = 2000;
 
   constructor(private hueService: HueService) {}
 
